@@ -1,9 +1,11 @@
 <?PHP
 
+namespace luojixinhao\mCurl;
+
 /**
  * @author Jason
  * @date 2017-09-11
- * @version 0.1
+ * @version 1.2
  */
 class multiCurl {
 
@@ -105,8 +107,9 @@ class multiCurl {
 				$getinfo = curl_getinfo($ch);
 				$content = curl_multi_getcontent($ch);
 				$error = curl_error($ch);
-				$url = isset($this->urlHandlePool[$ch]['url']) ? $this->urlHandlePool[$ch]['url'] : (isset($getinfo['url']) ? $getinfo['url'] : '');
-				$getheader = isset($this->urlHandlePool[$ch]['opt'][CURLOPT_HEADER]) ? $this->urlHandlePool[$ch]['opt'][CURLOPT_HEADER] : (isset($this->setopts[CURLOPT_HEADER]) ? $this->setopts[CURLOPT_HEADER] : false);
+				$thisUrlHandle = isset($this->urlHandlePool[(int)$ch]) ? $this->urlHandlePool[(int)$ch] : array();
+				$url = isset($thisUrlHandle['url']) ? $thisUrlHandle['url'] : (isset($getinfo['url']) ? $getinfo['url'] : '');
+				$getheader = isset($thisUrlHandle['opt'][CURLOPT_HEADER]) ? $thisUrlHandle['opt'][CURLOPT_HEADER] : (isset($this->setopts[CURLOPT_HEADER]) ? $this->setopts[CURLOPT_HEADER] : false);
 				if ($getheader) {
 					$tmp = null;
 					preg_match_all('#HTTP/.+(?=\r\n\r\n)#Usm', $content, $tmp);
@@ -117,12 +120,12 @@ class multiCurl {
 					}
 					$content = substr($content, $pos);
 				}
-				$args = isset($this->urlHandlePool[$ch]['arg']) ? $this->urlHandlePool[$ch]['arg'] : null;
+				$args = isset($thisUrlHandle['arg']) ? $thisUrlHandle['arg'] : null;
 
 				$this->infos['finishNum'] ++;
 				if ($errorno === CURLE_OK) {
 					$this->infos['succNum'] ++;
-					$callbackSuccess = isset($this->urlHandlePool[$ch]['success']) ? $this->urlHandlePool[$ch]['success'] : '';
+					$callbackSuccess = isset($thisUrlHandle['success']) ? $thisUrlHandle['success'] : '';
 					if (is_callable($callbackSuccess)) {
 						$tmpArr = array(
 							'url' => $url,
@@ -139,11 +142,11 @@ class multiCurl {
 					$this->infos['failNum'] ++;
 					isset($this->urlFailPool[$url]) ? $this->urlFailPool[$url] ++ : $this->urlFailPool[$url] = 1;
 					if ($this->urlFailPool[$url] < $this->maxTry) {
-						$this->add($url, $this->urlHandlePool[$ch]['opt'], $this->urlHandlePool[$ch]['arg'], $this->urlHandlePool[$ch]['success'], $this->urlHandlePool[$ch]['failure'], true);
+						$this->add($url, $thisUrlHandle['opt'], $thisUrlHandle['arg'], $thisUrlHandle['success'], $thisUrlHandle['failure'], true);
 					} else {
 						unset($this->urlFailPool[$url]);
 					}
-					$callbackFailure = isset($this->urlHandlePool[$ch]['failure']) ? $this->urlHandlePool[$ch]['failure'] : '';
+					$callbackFailure = isset($thisUrlHandle['failure']) ? $thisUrlHandle['failure'] : '';
 					if (is_callable($callbackFailure)) {
 						$tmpArr = array(
 							'url' => $url,
@@ -165,12 +168,12 @@ class multiCurl {
 					$sundry > 2 and $reArr[$i]['error'] = $error;
 					$sundry > 2 and $reArr[$i]['errorno'] = $errorno;
 					$sundry > 3 and $reArr[$i]['getinfo'] = $getinfo;
-					$sundry > 4 and $reArr[$i]['handle'] = $this->urlHandlePool[$ch];
+					$sundry > 4 and $reArr[$i]['handle'] = $thisUrlHandle;
 				}
 
 				curl_multi_remove_handle($this->mh, $ch);
 				curl_close($ch);
-				unset($this->urlHandlePool[$ch]);
+				unset($this->urlHandlePool[(int)$ch]);
 			}
 
 			if ($isFunc) {
@@ -214,7 +217,7 @@ class multiCurl {
 						$errcode = curl_multi_add_handle($this->mh, $ch);
 						if (0 === $errcode) {
 							$stillRunning++;
-							$this->urlHandlePool[$ch] = $urlItem;
+							$this->urlHandlePool[(int)$ch] = $urlItem;
 						} else {
 
 						}
