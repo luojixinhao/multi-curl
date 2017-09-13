@@ -1,0 +1,25 @@
+{
+    "name": "luojixinhao/multiCurl"
+    ,"type": "library"
+    ,"description": "multiCurl"
+    ,"keywords": ["curl", "curlmulti", "multicurl"]
+    ,"homepage": "https://github.com/luojixinhao/multiCurl"
+    ,"license": "Apache-2.0"
+    ,"require" : {
+	"php" : ">=5.3.0",
+	"ext-curl" : "*"
+    }
+    ,"authors": [
+        {
+            "name": "Jason Luo"
+            ,"email": "lx_2010@qq.com"
+	    ,"homepage": "http://www.9window.com"
+            ,"role": "Developer"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+		"luojixinhao\\mCurl\\" : [ "src" ]
+	}
+    }
+}
