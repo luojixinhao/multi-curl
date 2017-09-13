@@ -80,7 +80,7 @@ use luojixinhao\mCurl;
 
 $mc = new multiCurl();
 //不停采集某个地址，当采集大于10次后停止
-$mc->run(function() use ($mc) {
+$mc->run(function($mc) {
 	$mc->add('http://im.qq.com/album/', null, null,
 		function($url, $content, $args, $header, $errorno, $error) {
 		//成功时的回调

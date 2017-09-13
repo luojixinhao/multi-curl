@@ -1,9 +1,9 @@
 {
-    "name": "luojixinhao/multiCurl"
+    "name": "luojixinhao/multi-curl"
     ,"type": "library"
-    ,"description": "multiCurl"
+    ,"description": "multiCurl ¶àÏß³Ìcurl"
     ,"keywords": ["curl", "curlmulti", "multicurl"]
-    ,"homepage": "https://github.com/luojixinhao/multiCurl"
+    ,"homepage": "https://github.com/luojixinhao/multi-curl"
     ,"license": "Apache-2.0"
     ,"require" : {
 	"php" : ">=5.3.0",
