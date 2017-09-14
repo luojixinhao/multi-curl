@@ -1,7 +1,7 @@
 {
     "name": "luojixinhao/multi-curl"
     ,"type": "library"
-    ,"description": "multiCurl ¶àÏß³Ìcurl"
+    ,"description": "multiCurl å¤šçº¿ç¨‹curl"
     ,"keywords": ["curl", "curlmulti", "multicurl"]
     ,"homepage": "https://github.com/luojixinhao/multi-curl"
     ,"license": "Apache-2.0"

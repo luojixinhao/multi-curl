@@ -1,22 +1,22 @@
-¹ØÓÚ
+å…³äº
 -----
 
-ÀûÓÃcurl_multi_*ÏµÁĞº¯Êı+»Øµ÷´ïµ½¶àÏß³Ì²É¼¯¡£
+åˆ©ç”¨curl_multi_*ç³»åˆ—å‡½æ•°+å›è°ƒè¾¾åˆ°å¤šçº¿ç¨‹é‡‡é›†ã€‚
 
-ĞèÇó
+éœ€æ±‚
 ----
 PHP 5.3 +
 
-°²×°
+å®‰è£…
 ----
 composer require luojixinhao/multi-curl:*
 
-ÁªÏµ
+è”ç³»
 --------
 Email: lx_2010@qq.com<br>
 
 
-## Ê¾Àı
+## ç¤ºä¾‹
 
 ```php
 <?php
@@ -26,7 +26,7 @@ use luojixinhao\mCurl;
 $mc = new multiCurl();
 $mc->add('http://proxyip.9window.com/api/getproxyiplist/10');
 $mc->add('http://im.qq.com/album/');
-$re = $mc->run(4); //²»Ê¹ÓÃ»Øµ÷£¬Ö±½Ó·µ»Ø½á¹û
+$re = $mc->run(4); //ä¸ä½¿ç”¨å›è°ƒï¼Œç›´æ¥è¿”å›ç»“æœ
 print_r($re);
 ```
 
@@ -36,8 +36,8 @@ print_r($re);
 use luojixinhao\mCurl;
 
 $conf = array(
-	'maxTry' => 2, //Ê§°Ü³¢ÊÔ´ÎÊı
-	'maxConcur' => 5, //×î´ó²¢·¢Êı
+	'maxTry' => 2, //å¤±è´¥å°è¯•æ¬¡æ•°
+	'maxConcur' => 5, //æœ€å¤§å¹¶å‘æ•°
 );
 $mc = new multiCurl($conf);
 $mc->add('http://proxyip.9window.com/api/getproxyiplist/10', array(
@@ -45,10 +45,10 @@ $mc->add('http://proxyip.9window.com/api/getproxyiplist/10', array(
 ), array(
 	'arg1' => 'testArg'
 ), function($url, $content, $args, $header, $errorno, $error){
-	//³É¹¦Ê±µÄ»Øµ÷
+	//æˆåŠŸæ—¶çš„å›è°ƒ
 	print_r(func_get_args());
 }, function($url, $content, $args, $header, $errorno, $error){
-	//Ê§°ÜÊ±µÄ»Øµ÷
+	//å¤±è´¥æ—¶çš„å›è°ƒ
 	print_r(func_get_args());
 });
 $mc->run();
@@ -60,14 +60,14 @@ $mc->run();
 use luojixinhao\mCurl;
 
 $mc = new multiCurl();
-//ÏÈÔËĞĞÔÙ¶¯Ì¬Ìí¼Ó
+//å…ˆè¿è¡Œå†åŠ¨æ€æ·»åŠ 
 $mc->run(function() use ($mc) {
 	$mc->add('http://proxyip.9window.com/api/getproxyiplist/10', null, null,
 		function($url, $content, $args, $header, $errorno, $error) {
-		//³É¹¦Ê±µÄ»Øµ÷
+		//æˆåŠŸæ—¶çš„å›è°ƒ
 		print_r(func_get_args());
 	}, function($url, $content, $args, $header, $errorno, $error) {
-		//Ê§°ÜÊ±µÄ»Øµ÷
+		//å¤±è´¥æ—¶çš„å›è°ƒ
 		print_r(func_get_args());
 	});
 });
@@ -79,14 +79,14 @@ $mc->run(function() use ($mc) {
 use luojixinhao\mCurl;
 
 $mc = new multiCurl();
-//²»Í£²É¼¯Ä³¸öµØÖ·£¬µ±²É¼¯´óÓÚ10´ÎºóÍ£Ö¹
+//ä¸åœé‡‡é›†æŸä¸ªåœ°å€ï¼Œå½“é‡‡é›†å¤§äº10æ¬¡ååœæ­¢
 $mc->run(function($mc) {
 	$mc->add('http://im.qq.com/album/', null, null,
 		function($url, $content, $args, $header, $errorno, $error) {
-		//³É¹¦Ê±µÄ»Øµ÷
+		//æˆåŠŸæ—¶çš„å›è°ƒ
 		print_r(func_get_args());
 	}, function($url, $content, $args, $header, $errorno, $error) {
-		//Ê§°ÜÊ±µÄ»Øµ÷
+		//å¤±è´¥æ—¶çš„å›è°ƒ
 		print_r(func_get_args());
 	});
 
