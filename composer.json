@@ -4,7 +4,7 @@
     ,"description": "multiCurl 多线程curl"
     ,"keywords": ["curl", "curlmulti", "multicurl"]
     ,"homepage": "https://github.com/luojixinhao/multi-curl"
-    ,"license": "Apache-2.0"
+    ,"license": "MIT"
     ,"require" : {
 	"php" : ">=5.3.0",
 	"ext-curl" : "*"

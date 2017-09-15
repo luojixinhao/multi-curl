@@ -5,13 +5,14 @@ namespace luojixinhao\mCurl;
 /**
  * @author Jason
  * @date 2017-09-11
- * @version 1.2
+ * @version 1.3
  */
 class multiCurl {
 
 	protected $mh; //批处理cURL句柄
 	protected $maxTry = 3;  //失败时最大尝试次数。小于等于0都不尝试。
 	protected $maxConcur = 10; //并发数。小于等于1都代表并发为1。最大50000
+	protected $handle = ''; //对返回内容处理。可取：json,php
 	public $isStart = false; //是否已经开始采集
 	protected $hasRun = false; //是否存在运行线程
 	protected $urlPool = array(); //URL池子
@@ -51,6 +52,7 @@ class multiCurl {
 	public function setConfig($conf = array()) {
 		isset($conf['maxTry']) and $this->maxTry = intval($conf['maxTry']);
 		isset($conf['maxConcur']) and $this->maxConcur = intval($conf['maxConcur']);
+		isset($conf['handle']) and $this->handle = trim($conf['handle']);
 		$this->maxConcur < 1 and $this->maxConcur = 1;
 	}
 
@@ -120,13 +122,18 @@ class multiCurl {
 					}
 					$content = substr($content, $pos);
 				}
+				if ('json' == $this->handle) {
+					$content = json_decode($content, true);
+				} elseif ('php' == $this->handle) {
+					$content = unserialize($content);
+				}
 				$args = isset($thisUrlHandle['arg']) ? $thisUrlHandle['arg'] : null;
 
 				$this->infos['finishNum'] ++;
 				if ($errorno === CURLE_OK) {
 					$this->infos['succNum'] ++;
 					$callbackSuccess = isset($thisUrlHandle['success']) ? $thisUrlHandle['success'] : '';
-					if (is_callable($callbackSuccess)) {
+					if (is_callable($callbackSuccess) || function_exists($callbackSuccess)) {
 						$tmpArr = array(
 							'url' => $url,
 							'content' => $content,
@@ -147,7 +154,7 @@ class multiCurl {
 						unset($this->urlFailPool[$url]);
 					}
 					$callbackFailure = isset($thisUrlHandle['failure']) ? $thisUrlHandle['failure'] : '';
-					if (is_callable($callbackFailure)) {
+					if (is_callable($callbackFailure) || function_exists($callbackSuccess)) {
 						$tmpArr = array(
 							'url' => $url,
 							'content' => $content,
