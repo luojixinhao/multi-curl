@@ -154,7 +154,7 @@ class multiCurl {
 						unset($this->urlFailPool[$url]);
 					}
 					$callbackFailure = isset($thisUrlHandle['failure']) ? $thisUrlHandle['failure'] : '';
-					if (is_callable($callbackFailure) || function_exists($callbackSuccess)) {
+					if (is_callable($callbackFailure) || function_exists($callbackFailure)) {
 						$tmpArr = array(
 							'url' => $url,
 							'content' => $content,
