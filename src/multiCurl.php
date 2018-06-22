@@ -4,7 +4,7 @@ namespace luojixinhao\mCurl;
 
 /**
  * @author Jason
- * @date 2017-09-11
+ * @date 2018-06-22
  * @version 1.4
  */
 class multiCurl {
