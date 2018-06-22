@@ -5,7 +5,7 @@ namespace luojixinhao\mCurl;
 /**
  * @author Jason
  * @date 2017-09-11
- * @version 1.3
+ * @version 1.4
  */
 class multiCurl {
 
@@ -206,7 +206,7 @@ class multiCurl {
 		if (!is_resource($this->mh)) {
 			return $flag;
 		}
-		if ($this->urlPool) {
+		if ($this->urlPool && $this->infos['stillRunning'] < $this->maxConcur) {
 			$deadLoop = 0;
 			$stillRunning = 0;
 			do {
@@ -232,7 +232,8 @@ class multiCurl {
 
 					}
 				}
-			} while ($deadLoop < 50000 && ($this->maxConcur - ($this->infos['stillRunning'] + $stillRunning)) > 0);
+				$this->infos['stayNum'] = count($this->urlPool);
+			} while ($this->infos['stayNum'] > 0 && $deadLoop < 50000 && ($this->maxConcur - ($this->infos['stillRunning'] + $stillRunning)) > 0);
 			$this->infos['stayNum'] = count($this->urlPool);
 			$flag = $stillRunning;
 		}
